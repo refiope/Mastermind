@@ -19,31 +19,46 @@ class Creator
   def get_code
     puts "Choose four out of #{Colors.inspect} colors to create a sequence (each color should be unique!): "
     @@code = get_input
+    return @@code
   end
 
   def check_code (input)
     check_input_creator (input)
   end
-
-  def give_hint
-  end
 end
 
 class Game
-  def initialize (turn)
-   @turn = turn
-   guesser = Guesser.new()
-   creator = Creator.new()
+  include Mind_Reader
+
+  def initialize (number_of_turns)
+   @@end_turn = number_of_turns.to_i
+   @@guesser = Guesser.new()
+   @@creator = Creator.new()
   end
 
   def play
-    @turn.times do
+    code = @@creator.get_code
+
+    while !@@creator.check_code(code) do
+      puts "Type the right colors:"
+      code = @@creator.get_code
     end
+
+    @@end_turn.times do
+      guess = @@guesser.get_guess
+
+      while !@@guesser.check_guess(guess) do
+        puts "Type the right colors:"
+        guess = @@guesser.get_guess
+      end
+
+      break if game_over(guess, code)
+    end
+
+    puts "Game Over"
   end
 
-  def compare
-  end
-
-  def check_game_over
+  def game_over (guess, code)
+    check_game_over(guess, code)
   end
 end

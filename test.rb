@@ -42,4 +42,25 @@ def check_inside_Colors (string)
   Colors.include?(string.downcase.gsub(/[^a-z]/,""))
 end
 
-puts check_input_creator (get_input)
+def give_hint (guess, code)
+  #red_orb => right color, position
+  #white_orb => right color, wrong position
+  red_orb = 0
+  white_orb = 0
+
+  code.each_with_index do |color, index|
+    if (guess[index] == color)
+      red_orb += 1
+    elsif (guess.include?(color))
+      white_orb += 1
+    end
+  end
+
+  puts "Red Orb: #{red_orb}, White Orb: #{white_orb}"
+
+  return red_orb
+end
+
+guess = [1,2,3,4]
+code = [1,2,3,4]
+(give_hint(guess, code) == 4) ? (puts true) : (puts false)
