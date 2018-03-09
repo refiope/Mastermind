@@ -1,4 +1,15 @@
 Colors = ["red","blue","green","yellow","orange","black","white","pink"]
+Comments = {
+  welcome: "Welcome to Mindreader!",
+  guess: "Choose any four of these colors #{Colors.inspect} to guess:",
+  code: "Choose four out of #{Colors.inspect} colors to create a sequence (each color should be unique!): ",
+  creator_turn: "The creator creates the secret-code! Guesser should look the other way!",
+  ai_creator_turn: "The computer has created secret-code!",
+  guesser_turn: "Guesser's turn!",
+  ai_guesser_turn: "Computer is trying to figure out your code...",
+  ai_guess: "Is it this code?",
+  try_again: "Type the right colors:"
+}
 
 module Mind_Reader
   def get_input
@@ -6,6 +17,14 @@ module Mind_Reader
     4.times { input.push(gets.chomp) }
     input.collect! { |input| input.downcase.gsub(/[^a-z]/,"") }
     return input
+  end
+
+  def guesser_ai_input
+    return Colors.sample(4)
+  end
+
+  def creator_ai_input
+    return Colors.sample(4)
   end
 
   def check_input_guesser (guess)

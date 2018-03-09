@@ -4,8 +4,17 @@ class Guesser
   include Mind_Reader
 
   def get_guess
-    puts "Choose any four of these colors #{Colors.inspect} to guess: "
-    @@guess = get_input
+    puts Comments[:guess]
+    @guess = get_input
+  end
+
+  def get_guess_ai
+    puts Comments[:ai_guesser_turn]
+    sleep 3
+    @guess = guesser_ai_input
+    puts Comments[:ai_guess]
+    puts @guess.inspect
+    return @guess
   end
 
   def check_guess (input)
@@ -17,9 +26,14 @@ class Creator
   include Mind_Reader
 
   def get_code
-    puts "Choose four out of #{Colors.inspect} colors to create a sequence (each color should be unique!): "
-    @@code = get_input
-    return @@code
+    puts Comments[:code]
+    @code = get_input
+  end
+
+  def get_code_ai
+    puts Comments[:ai_creator_turn]
+    sleep 2
+    @code = creator_ai_input
   end
 
   def check_code (input)
@@ -30,29 +44,36 @@ end
 class Game
   include Mind_Reader
 
-  def initialize (number_of_turns)
-   @@end_turn = number_of_turns.to_i
-   @@guesser = Guesser.new()
-   @@creator = Creator.new()
+  def initialize
+   @end_turn = 12
+   @guesser = Guesser.new()
+   @creator = Creator.new()
   end
 
-  def play
-    code = @@creator.get_code
+  def creator_play
+    puts Comments[:creator_turn]
+    puts ""
+    @code = @creator.get_code
 
-    while !@@creator.check_code(code) do
-      puts "Type the right colors:"
-      code = @@creator.get_code
+    while !@creator.check_code(@code) do
+      puts Comments[:try_again]
+      @code = @creator.get_code
     end
+    30.times { puts "" }
+  end
 
-    @@end_turn.times do
-      guess = @@guesser.get_guess
+  def guesser_play
+    puts Comments[:guesser_turn]
+    @end_turn.times do
+      puts ""
+      guess = @guesser.get_guess
 
-      while !@@guesser.check_guess(guess) do
-        puts "Type the right colors:"
-        guess = @@guesser.get_guess
+      while !@guesser.check_guess(guess) do
+        puts Comments[:try_again]
+        guess = @guesser.get_guess
       end
 
-      break if game_over(guess, code)
+      break if game_over(guess, @code)
     end
 
     puts "Game Over"
