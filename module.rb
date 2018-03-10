@@ -24,6 +24,7 @@ module Mind_Reader
     return Colors.sample(4)
   end
 
+  # helper method for guesser_ai == finds the sum of orbs
   def orb_count (orb, turn)
     return orb[turn].inject(:+)
   end
@@ -36,6 +37,7 @@ module Mind_Reader
   # Searching for the color that is not part of the secret code
   def find_missing_orb (orb, guesses, turn, index)
     new_guess = []
+    # Go through the three-orb-count guess array to find the missing spot
     4.times { new_guess.push(guesses[turn-1-index][index]) }
     return new_guess
   end

@@ -1,6 +1,6 @@
 require './class.rb'
 
-#Game mode:Player as Guesser
+# Game mode:Player as Guesser
 class Game_Creator_AI < Game
   def creator_play
     @code = @creator.get_code_ai
@@ -9,13 +9,13 @@ class Game_Creator_AI < Game
   end
 end
 
-#Game mode:Player as Creator
+# Game mode:Player as Creator
 class Game_Guesser_AI < Game
 
   def guesser_play
     @orbs = []
-    right_guess = []
     guesses = []
+    # this is an index for searching through the 3 orb-count guess
     index = 0
 
     @end_turn.times do |turn|
