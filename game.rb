@@ -2,26 +2,27 @@
 require './class.rb'
 require './ai_class.rb'
 
-puts "Welcome to Mastermind!"
+def game_mode (game_type)
+  mode = game_type
+  mode.creator_play
+  mode.guesser_play
+end
+
+puts Comments[:welcome]
 puts "For 2-player mode type '1'"
 puts "Otherwise type '2' for playing as 'Creator',"
 puts "Or type '3' for playing as 'Guesser'"
 
+# Selecting game mode
 mode = gets.chomp
 
 case mode
 when '1'
-  two_player_mode = Game.new
-  two_player_mode.creator_play
-  two_player_mode.guesser_play
+  game_mode (Game.new)
 when '2'
-  creator_player_mode = Game_Guesser_AI.new
-  creator_player_mode.creator_play
-  creator_player_mode.guesser_play
+  game_mode (Game_Guesser_AI.new)
 when '3'
-  guesser_player_mode = Game_Creator_AI.new
-  guesser_player_mode.creator_play
-  guesser_player_mode.guesser_play
+  game_mode (Game_Creator_AI.new)
 else
   puts "You typed in wrong input"
 end

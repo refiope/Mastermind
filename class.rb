@@ -8,10 +8,10 @@ class Guesser
     @guess = get_input
   end
 
-  def get_guess_ai
+  def get_guess_ai(turns,orbs,guesses,index)
     puts Comments[:ai_guesser_turn]
     sleep 3
-    @guess = guesser_ai_input
+    @guess = guesser_ai_input(turns,orbs,guesses,index)
     puts Comments[:ai_guess]
     puts @guess.inspect
     return @guess
@@ -41,6 +41,7 @@ class Creator
   end
 end
 
+#Game Mode:Two Players
 class Game
   include Mind_Reader
 

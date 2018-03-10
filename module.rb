@@ -19,10 +19,64 @@ module Mind_Reader
     return input
   end
 
-  def guesser_ai_input
+  # helper method for #guesser_ai_input
+  def random_guess
     return Colors.sample(4)
   end
 
+  def orb_count (orb, turn)
+    return orb[turn].inject(:+)
+  end
+
+  # Maybe I'll try to make this better later on when I'm bored
+  def final_guess (guess)
+    return guess.sample(4)
+  end
+
+  # Searching for the color that is not part of the secret code
+  def find_missing_orb (orb, guesses, turn, index)
+    new_guess = []
+    4.times { new_guess.push(guesses[turn-1-index][index]) }
+    return new_guess
+  end
+
+  # Randomly guessing the color for the missing spot of the guess
+  def replace_missing_orb (guess, index)
+    colors = Colors
+    colors.delete_if do |color|
+      guess.include?(color)
+    end
+    guess[index-1] = colors.sample(1).join
+    return guess
+  end
+
+  # AI for guessing secret code
+  def guesser_ai_input (turn, orb, guesses, index)
+    if turn == 0
+      puts "Turn: #{turn+1}"
+      return random_guess
+    elsif orb_count(orb, turn-1) == 0 && index > 0
+      puts "Turn: #{turn+1}"
+      return replace_missing_orb(guesses[turn-1-index], index)
+    elsif orb_count(orb, turn-1) == 1 && index > 0
+      puts "Turn: #{turn+1}"
+      return find_missing_orb(orb, guesses, turn, index)
+    elsif orb_count(orb, turn-1) < 3
+      puts "Turn: #{turn+1}"
+      return random_guess
+    elsif orb_count(orb, turn-1) == 3 && index > 0
+      puts "Turn: #{turn+1}"
+      return replace_missing_orb(guesses[turn-1], index)
+    elsif orb_count(orb, turn-1) == 3
+      puts "Turn: #{turn+1}"
+      return find_missing_orb(orb, guesses, turn, index)
+    else
+      puts "Turn: #{turn+1}"
+      return final_guess(guesses[turn-1])
+    end
+  end
+
+  # AI for creating secret code
   def creator_ai_input
     return Colors.sample(4)
   end
@@ -61,13 +115,14 @@ module Mind_Reader
       end
     end
 
-    puts "Red Orb: #{red_orb}, White Orb: #{white_orb}"
-
-    return red_orb
+    return [red_orb,white_orb]
   end
 
   #Check number of red_orbs, depends on #give_hint method
   def check_game_over (guess, code)
-    (give_hint(guess, code) == 4) ? true : false
+    red_orb = give_hint(guess,code)[0]
+    white_orb = give_hint(guess,code)[1]
+    puts "Red Orb: #{red_orb}, White Orb: #{white_orb}"
+    (give_hint(guess, code)[0] == 4) ? true : false
   end
 end
